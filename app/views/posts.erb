@@ -1,0 +1,39 @@
+<h1>Hacker News</h1>
+
+<h3>Add a new post</h3>
+<form action="/posts" method="post" class="d-flex m-3">
+  <label for="title" class="m-2">Title:</label>
+  <input type="text" name="title">
+  <label for="url" class="m-2">Url:</label>
+  <input type="text" name="url">
+  <input type="submit" value="Add Post" class="mx-2">
+</form>
+
+<% @posts.each do |post| %>
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="<%="https://picsum.photos/id/#{rand(1..1000)}/300/500" %>" class="card-img" alt="random photo">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="/posts/<%= post.id %>" class="card-link text-info"> <%= post.title %></a>
+          </h5>
+          <p class="card-text">
+            <h6>Posted by: <i class="fas fa-user"></i> <%= post.user.username %></h6>
+          </p>
+          <p class="card-text">
+            <small class="text-muted"><%= post.created_at.strftime("%d/%m/%Y") %> </small>
+          </p>
+          <form action="/posts/<%= post.id %>" method="post">
+            <input type="hidden" name="_method" value="UPDATE">
+            <button type="submit" class="btn btn-outline-info">
+              <i class="far fa-thumbs-up"><%= post.votes %></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
