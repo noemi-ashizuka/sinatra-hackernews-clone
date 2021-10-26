@@ -34,7 +34,7 @@ db_namespace = namespace :db do
 
   desc 'migrate the database (options: VERSION=x).'
   task :migrate do
-    require_relative "../../utils"
+    require_relative "utils"
     FullStackChallengesUtils.rake_migrate(db_namespace, File.dirname(__FILE__))
   end
 
@@ -69,6 +69,10 @@ db_namespace = namespace :db do
   private
 
   def db_path
-    ActiveRecord::Base.configurations['development']['database']
+    if ActiveRecord.version.to_s >= "6.1"
+      ActiveRecord::Base.configurations.configs_for(env_name: 'development', name: 'primary').database
+    else
+      ActiveRecord::Base.configurations['development']['database']
+    end
   end
 end
